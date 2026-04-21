@@ -8,11 +8,17 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; background: #f0f2f5; padding: 16px; min-height: 100vh; }
     .container { max-width: 960px; margin: 0 auto; }
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    header h1 { font-size: 22px; color: #1a1a2e; }
-    .intro { background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 20px; font-size: 13px; color: #666; line-height: 1.8; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); flex-wrap: wrap; gap: 10px; }
+    .header-left { display: flex; align-items: center; gap: 8px; }
+    .header-left h1 { font-size: 22px; color: #1a1a2e; }
+    .admin-icon { width: 28px; height: 28px; cursor: pointer; opacity: 0.5; transition: opacity 0.2s; border: none; background: none; padding: 0; }
+    .admin-icon:hover { opacity: 0.85; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
     .btn-primary { background: #C53D43; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s; }
     .btn-primary:hover { background: #A63338; }
+    .btn-share-site { background: #f1f5f9; color: #475569; border: 1px solid #e0e0e0; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+    .btn-share-site:hover { border-color: #C53D43; color: #C53D43; }
+    .intro { background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 20px; font-size: 13px; color: #666; line-height: 1.8; }
     #filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
     #filter-bar input, #filter-bar select { padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: #fff; flex: 1; min-width: 150px; }
     #filter-bar input:focus, #filter-bar select:focus { outline: none; border-color: #C53D43; }
@@ -27,18 +33,22 @@
     .price { color: #e11d48; font-weight: 700; font-size: 20px; margin-bottom: 8px; }
     .tag { display: inline-block; background: #fef2f2; color: #C53D43; padding: 3px 10px; border-radius: 20px; font-size: 12px; }
     .meta { color: #888; font-size: 12px; margin-top: 10px; }
+    .expiry-tag { color: #ea580c; font-size: 11px; margin-top: 4px; }
     .actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
     .actions button { flex: 1; padding: 9px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: opacity 0.2s; min-width: 0; }
     .actions button:hover { opacity: 0.85; }
     .btn-msg { background: #C53D43; color: #fff; }
     .btn-contact { background: #f1f5f9; color: #475569; }
     .btn-manage { background: #fff7ed; color: #ea580c; font-size: 11px; }
+    .btn-share-item { background: #f0fdf4; color: #16a34a; font-size: 11px; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
     .modal-overlay.hidden { display: none; }
     .modal { background: #fff; padding: 24px; border-radius: 16px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; }
+    .modal-wide { max-width: 720px; }
     .modal h2 { font-size: 18px; margin-bottom: 16px; color: #1a1a2e; }
     .form-group { margin-bottom: 12px; }
     .form-group label { display: block; font-size: 13px; color: #666; margin-bottom: 4px; }
+    .form-group label .optional { color: #aaa; font-size: 11px; }
     .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; }
     .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #C53D43; }
     .form-group textarea { min-height: 70px; resize: vertical; }
@@ -67,22 +77,50 @@
     .upload-area .upload-icon { font-size: 28px; margin-bottom: 6px; }
     .upload-area .upload-text { font-size: 13px; color: #888; }
     .preview-img { width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px; margin-top: 8px; }
-    .code-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px; text-align: center; margin: 12px 0; }
-    .code-box .code { font-size: 24px; font-weight: 700; color: #A63338; letter-spacing: 4px; }
-    .code-box .code-hint { font-size: 12px; color: #C53D43; margin-top: 4px; }
     .img-viewer { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 200; cursor: pointer; }
     .img-viewer img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px; }
+    .review-modal-body { text-align: center; padding: 20px 0; }
+    .review-modal-body .review-icon { font-size: 56px; margin-bottom: 16px; }
+    .review-modal-body p { color: #555; font-size: 15px; line-height: 1.8; margin-bottom: 8px; }
+    .admin-login-form { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; }
+    .admin-login-form input { flex: 1; padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; }
+    .admin-login-form input:focus { outline: none; border-color: #C53D43; }
+    .admin-item { background: #f8fafc; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #e2e8f0; }
+    .admin-item .ai-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 10px; flex-wrap: wrap; }
+    .admin-item .ai-title { font-size: 16px; font-weight: 600; color: #1a1a2e; }
+    .admin-item .ai-time { font-size: 12px; color: #888; }
+    .admin-item .ai-details { font-size: 13px; color: #555; line-height: 1.8; }
+    .admin-item .ai-details span { display: inline-block; margin-right: 16px; }
+    .admin-item .ai-img { max-width: 200px; max-height: 140px; border-radius: 8px; object-fit: cover; margin: 8px 0; }
+    .admin-item .ai-actions { margin-top: 12px; display: flex; gap: 8px; }
+    .admin-item .ai-actions button { padding: 8px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; }
+    .btn-approve { background: #16a34a; color: #fff; }
+    .btn-approve:hover { background: #15803d; }
+    .btn-reject { background: #ef4444; color: #fff; }
+    .btn-reject:hover { background: #dc2626; }
+    .admin-logout { float: right; background: none; border: 1px solid #e0e0e0; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #666; }
+    .admin-logout:hover { border-color: #C53D43; color: #C53D43; }
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a1a2e; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 300; transition: opacity 0.3s; }
     @media (max-width: 600px) {
       #item-list { grid-template-columns: 1fr; }
       header { flex-direction: column; gap: 12px; }
+      .header-right { width: 100%; justify-content: center; }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>SeeSaw 二手购物频道</h1>
-      <button class="btn-primary" onclick="showPublish()">+ 发布商品</button>
+      <div class="header-left">
+        <h1>SeeSaw 二手购物频道</h1>
+        <button class="admin-icon" onclick="openAdminLogin()" title="管理员入口">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 12 0v1"/><path d="M19 8v5M16.5 10.5h5"/></svg>
+        </button>
+      </div>
+      <div class="header-right">
+        <button class="btn-share-site" onclick="shareSite()">分享频道</button>
+        <button class="btn-primary" onclick="showPublish()">+ 发布商品</button>
+      </div>
     </header>
 
     <div class="intro">
@@ -150,6 +188,10 @@
         </select>
       </div>
       <div class="form-group">
+        <label>截止保质期 <span class="optional">（选填）</span></label>
+        <input id="p-expiry" type="date">
+      </div>
+      <div class="form-group">
         <label>商品图片</label>
         <div class="upload-area" id="upload-area">
           <input type="file" accept="image/*" onchange="handleImageUpload(event)">
@@ -170,6 +212,20 @@
       <div class="modal-btns">
         <button class="btn-confirm" onclick="publishItem()">发布</button>
         <button class="btn-cancel" onclick="closePublish()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="review-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="review-modal-body">
+        <div class="review-icon">🎉</div>
+        <h2>感谢您上传商品！</h2>
+        <p>为保证优质体验，我们将尽快审核，<br>商品将在审核通过后正式发布。</p>
+        <p style="color:#C53D43;font-size:13px;">你的管理密码为联系方式的后6位，用于后续删除或标记已售</p>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-confirm" onclick="closeReviewModal()">我知道了</button>
       </div>
     </div>
   </div>
@@ -218,17 +274,25 @@
     </div>
   </div>
 
-  <div id="code-result-modal" class="modal-overlay hidden">
+  <div id="admin-modal" class="modal-overlay hidden">
+    <div class="modal modal-wide">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h2 style="margin-bottom:0;">管理员 · 待审核商品</h2>
+        <button class="admin-logout" onclick="logoutAdmin()">退出登录</button>
+      </div>
+      <div id="admin-content"></div>
+    </div>
+  </div>
+
+  <div id="admin-login-modal" class="modal-overlay hidden">
     <div class="modal" style="text-align:center;">
-      <h2>发布成功！</h2>
-      <p style="color:#666;font-size:13px;margin-bottom:8px;">你的管理密码为联系方式的后6位，用于后续删除或标记已售</p>
-      <div class="code-box">
-        <div class="code" id="result-code"></div>
-        <div class="code-hint">管理密码（点击复制）</div>
+      <h2>管理员登录</h2>
+      <div class="form-group">
+        <input id="admin-pwd" type="password" placeholder="请输入管理员密码" onkeydown="if(event.key==='Enter')loginAdmin()">
       </div>
       <div class="modal-btns">
-        <button class="btn-confirm" onclick="copyCode()">复制密码</button>
-        <button class="btn-cancel" onclick="closeCodeResult()">知道了</button>
+        <button class="btn-confirm" onclick="loginAdmin()">登录</button>
+        <button class="btn-cancel" onclick="closeAdminLogin()">取消</button>
       </div>
     </div>
   </div>
@@ -238,21 +302,48 @@
     const SUPABASE_URL = 'https://uzgslwomlvozizozmvlk.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6Z3Nsd29tbHZveml6b3ptdmxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NjAyNjgsImV4cCI6MjA5MjIzNjI2OH0.2GUmYE0lZ6HMmguEFFKQPZpU2gA_TiA-cbG2o_ul2Lo';
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const ADMIN_PWD = '577396';
 
     let currentItemId = null;
     let currentManageId = null;
     let statusFilter = 'available';
-    let lastPublishedCode = '';
-
-    function generateCode() {
-      return String(Math.floor(100000 + Math.random() * 900000));
-    }
+    let adminLoggedIn = false;
 
     function setStatusFilter(status, btn) {
       statusFilter = status;
       document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       loadItems();
+    }
+
+    function getBaseUrl() {
+      return window.location.origin + window.location.pathname;
+    }
+
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 2000);
+    }
+
+    function shareItem(itemId, title) {
+      const url = getBaseUrl() + '?item=' + itemId;
+      if (navigator.share) {
+        navigator.share({ title: 'SeeSaw 二手 - ' + title, text: '来看看这个二手好物: ' + title, url: url }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(url).then(() => showToast('商品链接已复制'));
+      }
+    }
+
+    function shareSite() {
+      const url = getBaseUrl();
+      if (navigator.share) {
+        navigator.share({ title: 'SeeSaw 二手购物频道', text: 'UADer的闲置交易平台，快来看看有什么好物吧！', url: url }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(url).then(() => showToast('频道链接已复制'));
+      }
     }
 
     async function handleImageUpload(event) {
@@ -286,6 +377,7 @@
         return;
       }
       const filtered = data.filter(item => {
+        if (item.status === 'pending') return false;
         const matchSearch = !search || item.title.toLowerCase().includes(search) || (item.description || '').toLowerCase().includes(search);
         const matchCategory = !category || item.category === category;
         const matchStatus = statusFilter === 'all' || item.status === statusFilter;
@@ -300,6 +392,9 @@
           ? `<img class="item-img" src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.title)}" onclick="viewImage('${escapeJs(item.image_url)}')" onerror="this.outerHTML='<div class=\\'item-no-img\\'>📦</div>'">`
           : '<div class="item-no-img">📦</div>';
         const isSold = item.status === 'sold';
+        const expiryHtml = item.expiry_date
+          ? `<div class="expiry-tag">保质期至: ${escapeHtml(item.expiry_date)}</div>`
+          : '';
         return `
           <div class="item-card">
             ${imgHtml}
@@ -307,11 +402,13 @@
               <h3>${escapeHtml(item.title)}${isSold ? '<span class="sold-badge">已售</span>' : ''}</h3>
               <div class="price">¥${item.price > 0 ? item.price : '面议'}</div>
               <span class="tag">${escapeHtml(item.category)}</span>
+              ${expiryHtml}
               ${item.description ? `<p style="color:#666;font-size:13px;margin-top:8px;line-height:1.4">${escapeHtml(item.description).substring(0, 60)}${item.description.length > 60 ? '...' : ''}</p>` : ''}
               <div class="meta">${escapeHtml(item.seller_name)} · ${formatDate(item.created_at)}</div>
               <div class="actions">
                 <button class="btn-msg" onclick="openMessage(${item.id}, '${escapeJs(item.title)}')">留言</button>
                 <button class="btn-contact" onclick="showContact('${escapeJs(item.seller_contact)}')">联系卖家</button>
+                <button class="btn-share-item" onclick="shareItem(${item.id}, '${escapeJs(item.title)}')">分享</button>
                 <button class="btn-manage" onclick="openManage(${item.id}, '${escapeJs(item.title)}')">管理</button>
               </div>
             </div>
@@ -356,6 +453,7 @@
     function showPublish() {
       document.getElementById('preview-img').style.display = 'none';
       document.getElementById('p-image').value = '';
+      document.getElementById('p-expiry').value = '';
       document.querySelector('.upload-area .upload-text').textContent = '点击选择图片或拖拽到此处';
       document.getElementById('publish-modal').classList.remove('hidden');
     }
@@ -377,15 +475,18 @@
         return;
       }
       const code = sellerContact.slice(-6);
+      const expiry = document.getElementById('p-expiry').value || null;
       const item = {
         title: title,
         description: document.getElementById('p-desc').value.trim(),
         price: parseFloat(document.getElementById('p-price').value) || 0,
         category: document.getElementById('p-category').value,
         image_url: document.getElementById('p-image').value.trim() || null,
+        expiry_date: expiry,
         seller_name: sellerName,
         seller_contact: sellerContact,
         manage_code: code,
+        status: 'pending',
       };
       const { error } = await db.from('items').insert([item]);
       if (error) {
@@ -396,24 +497,16 @@
       document.getElementById('p-desc').value = '';
       document.getElementById('p-price').value = '';
       document.getElementById('p-image').value = '';
+      document.getElementById('p-expiry').value = '';
       document.getElementById('p-seller').value = '';
       document.getElementById('p-contact').value = '';
       document.getElementById('preview-img').style.display = 'none';
       closePublish();
-      loadItems();
-      lastPublishedCode = code;
-      document.getElementById('result-code').textContent = code;
-      document.getElementById('code-result-modal').classList.remove('hidden');
+      document.getElementById('review-modal').classList.remove('hidden');
     }
 
-    function closeCodeResult() {
-      document.getElementById('code-result-modal').classList.add('hidden');
-    }
-
-    function copyCode() {
-      navigator.clipboard.writeText(lastPublishedCode).then(() => {
-        alert('已复制管理密码: ' + lastPublishedCode);
-      });
+    function closeReviewModal() {
+      document.getElementById('review-modal').classList.add('hidden');
     }
 
     function openManage(id, title) {
@@ -586,10 +679,111 @@
       modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
     }
 
+    function openAdminLogin() {
+      document.getElementById('admin-pwd').value = '';
+      document.getElementById('admin-login-modal').classList.remove('hidden');
+    }
+
+    function closeAdminLogin() {
+      document.getElementById('admin-login-modal').classList.add('hidden');
+    }
+
+    function loginAdmin() {
+      const pwd = document.getElementById('admin-pwd').value.trim();
+      if (pwd !== ADMIN_PWD) {
+        alert('密码错误');
+        return;
+      }
+      adminLoggedIn = true;
+      closeAdminLogin();
+      openAdminPanel();
+    }
+
+    function logoutAdmin() {
+      adminLoggedIn = false;
+      document.getElementById('admin-modal').classList.add('hidden');
+    }
+
+    async function openAdminPanel() {
+      document.getElementById('admin-modal').classList.remove('hidden');
+      const content = document.getElementById('admin-content');
+      content.innerHTML = '<div class="empty-state"><p>加载中...</p></div>';
+      const { data, error } = await db.from('items').select('*').eq('status', 'pending').order('created_at', { ascending: false });
+      if (error) {
+        content.innerHTML = '<div class="empty-state"><p>加载失败</p></div>';
+        return;
+      }
+      if (!data || data.length === 0) {
+        content.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>暂无待审核商品</p></div>';
+        return;
+      }
+      content.innerHTML = data.map(item => {
+        const imgHtml = item.image_url
+          ? `<img class="ai-img" src="${escapeHtml(item.image_url)}" onerror="this.style.display='none'">`
+          : '';
+        return `
+          <div class="admin-item">
+            <div class="ai-header">
+              <div class="ai-title">${escapeHtml(item.title)}</div>
+              <div class="ai-time">上传于 ${formatDate(item.created_at)}</div>
+            </div>
+            ${imgHtml}
+            <div class="ai-details">
+              <span>💰 ¥${item.price > 0 ? item.price : '面议'}</span>
+              <span>📂 ${escapeHtml(item.category)}</span>
+              ${item.expiry_date ? `<span>保质期至: ${escapeHtml(item.expiry_date)}</span>` : ''}
+            </div>
+            <div class="ai-details" style="margin-top:6px;">
+              <span>👤 ${escapeHtml(item.seller_name)}</span>
+              <span>📞 ${escapeHtml(item.seller_contact)}</span>
+            </div>
+            ${item.description ? `<div class="ai-details" style="margin-top:6px;">${escapeHtml(item.description)}</div>` : ''}
+            <div class="ai-actions">
+              <button class="btn-approve" onclick="approveItem(${item.id})">✓ 审核通过</button>
+              <button class="btn-reject" onclick="rejectItem(${item.id})">✕ 拒绝并删除</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function approveItem(id) {
+      const { error } = await db.from('items').update({ status: 'available' }).eq('id', id);
+      if (error) { alert('操作失败'); return; }
+      showToast('已审核通过');
+      openAdminPanel();
+      loadItems();
+    }
+
+    async function rejectItem(id) {
+      showConfirmModal('确认拒绝？', '该商品将被永久删除。', async () => {
+        const { error } = await db.from('items').delete().eq('id', id);
+        if (error) { alert('删除失败'); return; }
+        showToast('已拒绝并删除');
+        openAdminPanel();
+      });
+    }
+
     document.getElementById('publish-modal').addEventListener('click', function(e) { if (e.target === this) closePublish(); });
     document.getElementById('message-modal').addEventListener('click', function(e) { if (e.target === this) closeMessage(); });
     document.getElementById('manage-modal').addEventListener('click', function(e) { if (e.target === this) closeManage(); });
-    document.getElementById('code-result-modal').addEventListener('click', function(e) { if (e.target === this) closeCodeResult(); });
+    document.getElementById('review-modal').addEventListener('click', function(e) { if (e.target === this) closeReviewModal(); });
+    document.getElementById('admin-modal').addEventListener('click', function(e) { if (e.target === this) document.getElementById('admin-modal').classList.add('hidden'); });
+    document.getElementById('admin-login-modal').addEventListener('click', function(e) { if (e.target === this) closeAdminLogin(); });
+
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const itemId = params.get('item');
+      if (itemId) {
+        const check = setInterval(() => {
+          const card = document.querySelector(`[onclick*="openMessage(${itemId}"]`);
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            clearInterval(check);
+          }
+        }, 500);
+        setTimeout(() => clearInterval(check), 10000);
+      }
+    })();
 
     loadItems();
   </script>
