@@ -3,33 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>公司二手集市</title>
+  <title>SeeSaw 二手购物频道</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; background: #f0f2f5; padding: 16px; min-height: 100vh; }
     .container { max-width: 960px; margin: 0 auto; }
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0; background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
     header h1 { font-size: 22px; color: #1a1a2e; }
-    .btn-primary { background: #6366f1; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s; }
-    .btn-primary:hover { background: #4f46e5; }
+    .intro { background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 20px; font-size: 13px; color: #666; line-height: 1.8; }
+    .btn-primary { background: #C53D43; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s; }
+    .btn-primary:hover { background: #A63338; }
     #filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
     #filter-bar input, #filter-bar select { padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: #fff; flex: 1; min-width: 150px; }
-    #filter-bar input:focus, #filter-bar select:focus { outline: none; border-color: #6366f1; }
+    #filter-bar input:focus, #filter-bar select:focus { outline: none; border-color: #C53D43; }
     #item-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
     .item-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
     .item-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
     .item-img { width: 100%; height: 180px; object-fit: cover; background: #e8e8e8; cursor: pointer; }
-    .item-no-img { width: 100%; height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 48px; }
+    .item-no-img { width: 100%; height: 180px; background: linear-gradient(135deg, #D4645E 0%, #C53D43 100%); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 48px; }
     .item-body { padding: 16px; }
     .item-body h3 { font-size: 16px; color: #1a1a2e; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .sold-badge { background: #ef4444; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: normal; }
     .price { color: #e11d48; font-weight: 700; font-size: 20px; margin-bottom: 8px; }
-    .tag { display: inline-block; background: #eef2ff; color: #6366f1; padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+    .tag { display: inline-block; background: #fef2f2; color: #C53D43; padding: 3px 10px; border-radius: 20px; font-size: 12px; }
     .meta { color: #888; font-size: 12px; margin-top: 10px; }
     .actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
     .actions button { flex: 1; padding: 9px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: opacity 0.2s; min-width: 0; }
     .actions button:hover { opacity: 0.85; }
-    .btn-msg { background: #6366f1; color: #fff; }
+    .btn-msg { background: #C53D43; color: #fff; }
     .btn-contact { background: #f1f5f9; color: #475569; }
     .btn-manage { background: #fff7ed; color: #ea580c; font-size: 11px; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
@@ -39,36 +40,36 @@
     .form-group { margin-bottom: 12px; }
     .form-group label { display: block; font-size: 13px; color: #666; margin-bottom: 4px; }
     .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; }
-    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #6366f1; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #C53D43; }
     .form-group textarea { min-height: 70px; resize: vertical; }
     .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
     .modal-btns button { flex: 1; padding: 11px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; }
-    .modal-btns .btn-confirm { background: #6366f1; color: #fff; }
+    .modal-btns .btn-confirm { background: #C53D43; color: #fff; }
     .modal-btns .btn-cancel { background: #f1f5f9; color: #475569; }
     .modal-btns .btn-danger { background: #ef4444; color: #fff; }
     #msg-list { max-height: 300px; overflow-y: auto; background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
     .msg-item { margin-bottom: 12px; font-size: 13px; line-height: 1.5; }
     .msg-item:last-child { margin-bottom: 0; }
-    .msg-author { font-weight: 600; color: #6366f1; }
+    .msg-author { font-weight: 600; color: #C53D43; }
     .msg-time { color: #aaa; font-size: 11px; margin-top: 2px; }
     .msg-reply { margin-left: 20px; padding-left: 10px; border-left: 2px solid #e0e0e0; margin-top: 6px; }
     .msg-reply .msg-author { color: #10b981; }
-    .msg-reply-btn { color: #6366f1; font-size: 11px; cursor: pointer; border: none; background: none; padding: 2px 0; }
+    .msg-reply-btn { color: #C53D43; font-size: 11px; cursor: pointer; border: none; background: none; padding: 2px 0; }
     .msg-reply-btn:hover { text-decoration: underline; }
     .empty-state { text-align: center; padding: 60px 20px; color: #888; }
     .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
     .tab-bar { display: flex; gap: 4px; margin-bottom: 20px; background: #fff; padding: 4px; border-radius: 10px; }
     .tab-bar button { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; background: transparent; color: #666; transition: all 0.2s; }
-    .tab-bar button.active { background: #6366f1; color: #fff; }
+    .tab-bar button.active { background: #C53D43; color: #fff; }
     .upload-area { border: 2px dashed #d0d0d0; border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: border-color 0.2s; position: relative; }
-    .upload-area:hover { border-color: #6366f1; }
+    .upload-area:hover { border-color: #C53D43; }
     .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
     .upload-area .upload-icon { font-size: 28px; margin-bottom: 6px; }
     .upload-area .upload-text { font-size: 13px; color: #888; }
     .preview-img { width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px; margin-top: 8px; }
-    .code-box { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 12px; text-align: center; margin: 12px 0; }
-    .code-box .code { font-size: 24px; font-weight: 700; color: #4f46e5; letter-spacing: 4px; }
-    .code-box .code-hint { font-size: 12px; color: #6366f1; margin-top: 4px; }
+    .code-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px; text-align: center; margin: 12px 0; }
+    .code-box .code { font-size: 24px; font-weight: 700; color: #A63338; letter-spacing: 4px; }
+    .code-box .code-hint { font-size: 12px; color: #C53D43; margin-top: 4px; }
     .img-viewer { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 200; cursor: pointer; }
     .img-viewer img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px; }
     @media (max-width: 600px) {
@@ -80,9 +81,16 @@
 <body>
   <div class="container">
     <header>
-      <h1>公司二手集市</h1>
+      <h1>SeeSaw 二手购物频道</h1>
       <button class="btn-primary" onclick="showPublish()">+ 发布商品</button>
     </header>
+
+    <div class="intro">
+      跷跷板二手购物，是慢滴女士的创业项目，UADer可以在这里将闲置的物品进行售卖，满足你的物质需求，支持你的社交破圈。以下注意事项请仔细阅读：<br>
+      第一，频道不负责货品验真，鼓励线下查看实物后再确认是否购买；<br>
+      第二，一旦交易成功，请自行删除商品，频道不负责售后保障；<br>
+      第三，频道目前不收取中间费用，但是欢迎大家在使用满意的情况下给频道打赏。
+    </div>
 
     <div id="filter-bar">
       <input type="text" id="search-input" placeholder="搜索商品名称或描述..." oninput="loadItems()">
@@ -180,6 +188,7 @@
         <button class="btn-danger" onclick="deleteItem()">删除商品</button>
       </div>
       <div class="modal-btns" style="margin-top:8px;">
+        <button class="btn-tip" onclick="showTip()" style="flex:1;padding:11px;border:1px solid #C53D43;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;background:#fff;color:#C53D43;">打赏</button>
         <button class="btn-cancel" onclick="closeManage()">取消</button>
       </div>
     </div>
@@ -553,9 +562,24 @@
       modal.innerHTML = `
         <div class="modal" style="text-align:center;">
           <h2 style="margin-bottom:20px;">卖家联系方式</h2>
-          <p style="font-size:20px;font-weight:600;color:#6366f1;margin-bottom:20px;word-break:break-all;">${escapeHtml(contact)}</p>
+          <p style="font-size:20px;font-weight:600;color:#C53D43;margin-bottom:20px;word-break:break-all;">${escapeHtml(contact)}</p>
           <button class="btn-primary" style="width:100%;padding:12px;" onclick="navigator.clipboard.writeText('${escapeJs(contact)}');this.textContent='已复制';setTimeout(()=>this.textContent='复制联系方式',1500)">复制联系方式</button>
           <button class="btn-cancel" style="width:100%;padding:12px;margin-top:8px;border:1px solid #e0e0e0;border-radius:8px;cursor:pointer;background:#f1f5f9;color:#475569;font-size:14px;" onclick="this.closest('.modal-overlay').remove()">关闭</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    }
+
+    function showTip() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
+        <div class="modal" style="text-align:center;">
+          <h2 style="margin-bottom:16px;">打赏频道</h2>
+          <img src="https://uzgslwomlvozizozmvlk.supabase.co/storage/v1/object/public/images/qr-code.jpeg" style="width:220px;height:220px;border-radius:12px;margin-bottom:16px;">
+          <p style="color:#C53D43;font-size:15px;font-weight:500;margin-bottom:16px;">感谢您的认可和支持</p>
+          <button class="btn-cancel" style="width:100%;padding:11px;border:1px solid #e0e0e0;border-radius:8px;cursor:pointer;background:#f1f5f9;color:#475569;font-size:14px;" onclick="this.closest('.modal-overlay').remove()">关闭</button>
         </div>
       `;
       document.body.appendChild(modal);
