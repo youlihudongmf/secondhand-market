@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>公司二手集市</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; background: #f0f2f5; padding: 16px; min-height: 100vh; }
+    .container { max-width: 960px; margin: 0 auto; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #fff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    header h1 { font-size: 22px; color: #1a1a2e; }
+    .btn-primary { background: #6366f1; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s; }
+    .btn-primary:hover { background: #4f46e5; }
+    #filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    #filter-bar input, #filter-bar select { padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: #fff; flex: 1; min-width: 150px; }
+    #filter-bar input:focus, #filter-bar select:focus { outline: none; border-color: #6366f1; }
+    #item-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .item-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
+    .item-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+    .item-img { width: 100%; height: 180px; object-fit: cover; background: #e8e8e8; }
+    .item-no-img { width: 100%; height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 48px; }
+    .item-body { padding: 16px; }
+    .item-body h3 { font-size: 16px; color: #1a1a2e; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .sold-badge { background: #ef4444; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: normal; }
+    .price { color: #e11d48; font-weight: 700; font-size: 20px; margin-bottom: 8px; }
+    .tag { display: inline-block; background: #eef2ff; color: #6366f1; padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+    .meta { color: #888; font-size: 12px; margin-top: 10px; }
+    .actions { margin-top: 12px; display: flex; gap: 8px; }
+    .actions button { flex: 1; padding: 9px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: opacity 0.2s; }
+    .actions button:hover { opacity: 0.85; }
+    .btn-msg { background: #6366f1; color: #fff; }
+    .btn-contact { background: #f1f5f9; color: #475569; }
+    .btn-mark-sold { background: #fef2f2; color: #ef4444; font-size: 11px; padding: 6px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+    .modal-overlay.hidden { display: none; }
+    .modal { background: #fff; padding: 24px; border-radius: 16px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; }
+    .modal h2 { font-size: 18px; margin-bottom: 16px; color: #1a1a2e; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 13px; color: #666; margin-bottom: 4px; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #6366f1; }
+    .form-group textarea { min-height: 70px; resize: vertical; }
+    .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
+    .modal-btns button { flex: 1; padding: 11px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; }
+    .modal-btns .btn-confirm { background: #6366f1; color: #fff; }
+    .modal-btns .btn-cancel { background: #f1f5f9; color: #475569; }
+    #msg-list { max-height: 220px; overflow-y: auto; background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+    .msg-item { margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+    .msg-item:last-child { margin-bottom: 0; }
+    .msg-author { font-weight: 600; color: #6366f1; }
+    .msg-time { color: #aaa; font-size: 11px; margin-top: 2px; }
+    .empty-state { text-align: center; padding: 60px 20px; color: #888; }
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    .tab-bar { display: flex; gap: 4px; margin-bottom: 20px; background: #fff; padding: 4px; border-radius: 10px; }
+    .tab-bar button { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; background: transparent; color: #666; transition: all 0.2s; }
+    .tab-bar button.active { background: #6366f1; color: #fff; }
+    @media (max-width: 600px) {
+      #item-list { grid-template-columns: 1fr; }
+      header { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>公司二手集市</h1>
+      <button class="btn-primary" onclick="showPublish()">+ 发布商品</button>
+    </header>
+
+    <div id="filter-bar">
+      <input type="text" id="search-input" placeholder="搜索商品名称或描述..." oninput="loadItems()">
+      <select id="category-filter" onchange="loadItems()">
+        <option value="">全部分类</option>
+        <option value="电子产品">电子产品</option>
+        <option value="书籍">书籍</option>
+        <option value="家居">家居</option>
+        <option value="服饰">服饰</option>
+        <option value="运动户外">运动户外</option>
+        <option value="母婴">母婴</option>
+        <option value="其他">其他</option>
+      </select>
+    </div>
+
+    <div class="tab-bar">
+      <button class="active" onclick="setStatusFilter('available', this)">在售</button>
+      <button onclick="setStatusFilter('sold', this)">已售</button>
+      <button onclick="setStatusFilter('all', this)">全部</button>
+    </div>
+
+    <div id="item-list">
+      <div class="empty-state">
+        <div class="icon">📦</div>
+        <p>加载中...</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="publish-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>发布商品</h2>
+      <div class="form-group">
+        <label>商品名称 *</label>
+        <input id="p-title" placeholder="如: 九成新 AirPods Pro 2">
+      </div>
+      <div class="form-group">
+        <label>描述</label>
+        <textarea id="p-desc" placeholder="成色、购买时间、转手原因等"></textarea>
+      </div>
+      <div class="form-group">
+        <label>价格（元）</label>
+        <input id="p-price" type="number" min="0" placeholder="0 表示面议">
+      </div>
+      <div class="form-group">
+        <label>分类</label>
+        <select id="p-category">
+          <option value="电子产品">电子产品</option>
+          <option value="书籍">书籍</option>
+          <option value="家居">家居</option>
+          <option value="服饰">服饰</option>
+          <option value="运动户外">运动户外</option>
+          <option value="母婴">母婴</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>图片链接（选填）</label>
+        <input id="p-image" placeholder="粘贴图片 URL">
+      </div>
+      <div class="form-group">
+        <label>你的姓名 *</label>
+        <input id="p-seller" placeholder="用于展示">
+      </div>
+      <div class="form-group">
+        <label>联系方式 *</label>
+        <input id="p-contact" placeholder="微信号或手机号">
+      </div>
+      <div class="modal-btns">
+        <button class="btn-confirm" onclick="publishItem()">发布</button>
+        <button class="btn-cancel" onclick="closePublish()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="message-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2 id="msg-item-title"></h2>
+      <div id="msg-list"><p style="color:#aaa;font-size:13px;">暂无留言</p></div>
+      <div class="form-group">
+        <label>你的姓名 *</label>
+        <input id="m-name" placeholder="填写姓名">
+      </div>
+      <div class="form-group">
+        <label>你的联系方式</label>
+        <input id="m-contact" placeholder="微信号或手机号">
+      </div>
+      <div class="form-group">
+        <label>留言内容 *</label>
+        <textarea id="m-content" placeholder="我对这个商品感兴趣..."></textarea>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-confirm" onclick="sendMessage()">发送留言</button>
+        <button class="btn-cancel" onclick="closeMessage()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://uzgslwomlvozizozmvlk.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6Z3Nsd29tbHZveml6b3ptdmxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2NjAyNjgsImV4cCI6MjA5MjIzNjI2OH0.2GUmYE0lZ6HMmguEFFKQPZpU2gA_TiA-cbG2o_ul2Lo';
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentItemId = null;
+    let statusFilter = 'available';
+
+    function setStatusFilter(status, btn) {
+      statusFilter = status;
+      document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadItems();
+    }
+
+    async function loadItems() {
+      const search = document.getElementById('search-input').value.toLowerCase().trim();
+      const category = document.getElementById('category-filter').value;
+
+      const { data, error } = await db
+        .from('items')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error(error);
+        document.getElementById('item-list').innerHTML = '<div class="empty-state"><p>加载失败，请刷新重试</p></div>';
+        return;
+      }
+
+      const filtered = data.filter(item => {
+        const matchSearch = !search ||
+          item.title.toLowerCase().includes(search) ||
+          (item.description || '').toLowerCase().includes(search);
+        const matchCategory = !category || item.category === category;
+        const matchStatus = statusFilter === 'all' || item.status === statusFilter;
+        return matchSearch && matchCategory && matchStatus;
+      });
+
+      if (filtered.length === 0) {
+        document.getElementById('item-list').innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>暂无商品，点击右上角发布吧</p></div>';
+        return;
+      }
+
+      document.getElementById('item-list').innerHTML = filtered.map(item => {
+        const imgHtml = item.image_url
+          ? `<img class="item-img" src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.title)}" onerror="this.outerHTML='<div class=\\'item-no-img\\'>📦</div>'">`
+          : '<div class="item-no-img">📦</div>';
+        const isSold = item.status === 'sold';
+        return `
+          <div class="item-card">
+            ${imgHtml}
+            <div class="item-body">
+              <h3>${escapeHtml(item.title)}${isSold ? '<span class="sold-badge">已售</span>' : ''}</h3>
+              <div class="price">¥${item.price > 0 ? item.price : '面议'}</div>
+              <span class="tag">${escapeHtml(item.category)}</span>
+              ${item.description ? `<p style="color:#666;font-size:13px;margin-top:8px;line-height:1.4">${escapeHtml(item.description).substring(0, 60)}${item.description.length > 60 ? '...' : ''}</p>` : ''}
+              <div class="meta">${escapeHtml(item.seller_name)} · ${formatDate(item.created_at)}</div>
+              <div class="actions">
+                <button class="btn-msg" onclick="openMessage(${item.id}, '${escapeJs(item.title)}')">留言</button>
+                <button class="btn-contact" onclick="showContact('${escapeJs(item.seller_contact)}')">联系卖家</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function escapeJs(str) {
+      if (!str) return '';
+      return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      const now = new Date();
+      const diffMs = now - d;
+      const diffMin = Math.floor(diffMs / 60000);
+      const diffHour = Math.floor(diffMs / 3600000);
+      const diffDay = Math.floor(diffMs / 86400000);
+      if (diffMin < 1) return '刚刚';
+      if (diffMin < 60) return diffMin + '分钟前';
+      if (diffHour < 24) return diffHour + '小时前';
+      if (diffDay < 7) return diffDay + '天前';
+      return d.toLocaleDateString('zh-CN');
+    }
+
+    function showPublish() {
+      document.getElementById('publish-modal').classList.remove('hidden');
+    }
+
+    function closePublish() {
+      document.getElementById('publish-modal').classList.add('hidden');
+    }
+
+    async function publishItem() {
+      const title = document.getElementById('p-title').value.trim();
+      const sellerName = document.getElementById('p-seller').value.trim();
+      const sellerContact = document.getElementById('p-contact').value.trim();
+
+      if (!title || !sellerName || !sellerContact) {
+        alert('请填写商品名称、姓名和联系方式');
+        return;
+      }
+
+      const item = {
+        title: title,
+        description: document.getElementById('p-desc').value.trim(),
+        price: parseFloat(document.getElementById('p-price').value) || 0,
+        category: document.getElementById('p-category').value,
+        image_url: document.getElementById('p-image').value.trim() || null,
+        seller_name: sellerName,
+        seller_contact: sellerContact,
+      };
+
+      const { error } = await db.from('items').insert([item]);
+      if (error) {
+        alert('发布失败: ' + error.message);
+        return;
+      }
+
+      document.getElementById('p-title').value = '';
+      document.getElementById('p-desc').value = '';
+      document.getElementById('p-price').value = '';
+      document.getElementById('p-image').value = '';
+      document.getElementById('p-seller').value = '';
+      document.getElementById('p-contact').value = '';
+
+      closePublish();
+      loadItems();
+    }
+
+    function openMessage(id, title) {
+      currentItemId = id;
+      document.getElementById('msg-item-title').textContent = title;
+      document.getElementById('message-modal').classList.remove('hidden');
+      loadMessages(id);
+    }
+
+    function closeMessage() {
+      document.getElementById('message-modal').classList.add('hidden');
+      currentItemId = null;
+    }
+
+    async function loadMessages(itemId) {
+      const { data } = await db
+        .from('messages')
+        .select('*')
+        .eq('item_id', itemId)
+        .order('created_at', { ascending: true });
+
+      const list = document.getElementById('msg-list');
+      if (!data || data.length === 0) {
+        list.innerHTML = '<p style="color:#aaa;font-size:13px;">暂无留言，来写第一条吧</p>';
+        return;
+      }
+
+      list.innerHTML = data.map(m => `
+        <div class="msg-item">
+          <span class="msg-author">${escapeHtml(m.buyer_name)}</span>: ${escapeHtml(m.content)}
+          <div class="msg-time">${formatDate(m.created_at)}</div>
+        </div>
+      `).join('');
+
+      list.scrollTop = list.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const name = document.getElementById('m-name').value.trim();
+      const content = document.getElementById('m-content').value.trim();
+
+      if (!name || !content) {
+        alert('请填写姓名和留言内容');
+        return;
+      }
+
+      const msg = {
+        item_id: currentItemId,
+        buyer_name: name,
+        buyer_contact: document.getElementById('m-contact').value.trim(),
+        content: content,
+      };
+
+      const { error } = await db.from('messages').insert([msg]);
+      if (error) {
+        alert('发送失败');
+        return;
+      }
+
+      document.getElementById('m-content').value = '';
+      loadMessages(currentItemId);
+    }
+
+    function showContact(contact) {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
+        <div class="modal" style="text-align:center;">
+          <h2 style="margin-bottom:20px;">卖家联系方式</h2>
+          <p style="font-size:20px;font-weight:600;color:#6366f1;margin-bottom:20px;word-break:break-all;">${escapeHtml(contact)}</p>
+          <button class="btn-primary" style="width:100%;padding:12px;" onclick="navigator.clipboard.writeText('${escapeJs(contact)}');this.textContent='已复制';setTimeout(()=>this.textContent='复制联系方式',1500)">复制联系方式</button>
+          <button class="btn-cancel" style="width:100%;padding:12px;margin-top:8px;border:1px solid #e0e0e0;border-radius:8px;cursor:pointer;background:#f1f5f9;color:#475569;font-size:14px;" onclick="this.closest('.modal-overlay').remove()">关闭</button>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    }
+
+    document.getElementById('publish-modal').addEventListener('click', function(e) {
+      if (e.target === this) closePublish();
+    });
+    document.getElementById('message-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeMessage();
+    });
+
+    loadItems();
+  </script>
+</body>
+</html>
