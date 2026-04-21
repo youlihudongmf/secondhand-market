@@ -18,20 +18,20 @@
     #item-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
     .item-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
     .item-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
-    .item-img { width: 100%; height: 180px; object-fit: cover; background: #e8e8e8; }
+    .item-img { width: 100%; height: 180px; object-fit: cover; background: #e8e8e8; cursor: pointer; }
     .item-no-img { width: 100%; height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); font-size: 48px; }
     .item-body { padding: 16px; }
-    .item-body h3 { font-size: 16px; color: #1a1a2e; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .item-body h3 { font-size: 16px; color: #1a1a2e; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .sold-badge { background: #ef4444; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: normal; }
     .price { color: #e11d48; font-weight: 700; font-size: 20px; margin-bottom: 8px; }
     .tag { display: inline-block; background: #eef2ff; color: #6366f1; padding: 3px 10px; border-radius: 20px; font-size: 12px; }
     .meta { color: #888; font-size: 12px; margin-top: 10px; }
-    .actions { margin-top: 12px; display: flex; gap: 8px; }
-    .actions button { flex: 1; padding: 9px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: opacity 0.2s; }
+    .actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .actions button { flex: 1; padding: 9px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; transition: opacity 0.2s; min-width: 0; }
     .actions button:hover { opacity: 0.85; }
     .btn-msg { background: #6366f1; color: #fff; }
     .btn-contact { background: #f1f5f9; color: #475569; }
-    .btn-mark-sold { background: #fef2f2; color: #ef4444; font-size: 11px; padding: 6px; }
+    .btn-manage { background: #fff7ed; color: #ea580c; font-size: 11px; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
     .modal-overlay.hidden { display: none; }
     .modal { background: #fff; padding: 24px; border-radius: 16px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; }
@@ -45,16 +45,32 @@
     .modal-btns button { flex: 1; padding: 11px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; }
     .modal-btns .btn-confirm { background: #6366f1; color: #fff; }
     .modal-btns .btn-cancel { background: #f1f5f9; color: #475569; }
-    #msg-list { max-height: 220px; overflow-y: auto; background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
-    .msg-item { margin-bottom: 10px; font-size: 13px; line-height: 1.5; }
+    .modal-btns .btn-danger { background: #ef4444; color: #fff; }
+    #msg-list { max-height: 300px; overflow-y: auto; background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+    .msg-item { margin-bottom: 12px; font-size: 13px; line-height: 1.5; }
     .msg-item:last-child { margin-bottom: 0; }
     .msg-author { font-weight: 600; color: #6366f1; }
     .msg-time { color: #aaa; font-size: 11px; margin-top: 2px; }
+    .msg-reply { margin-left: 20px; padding-left: 10px; border-left: 2px solid #e0e0e0; margin-top: 6px; }
+    .msg-reply .msg-author { color: #10b981; }
+    .msg-reply-btn { color: #6366f1; font-size: 11px; cursor: pointer; border: none; background: none; padding: 2px 0; }
+    .msg-reply-btn:hover { text-decoration: underline; }
     .empty-state { text-align: center; padding: 60px 20px; color: #888; }
     .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
     .tab-bar { display: flex; gap: 4px; margin-bottom: 20px; background: #fff; padding: 4px; border-radius: 10px; }
     .tab-bar button { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; background: transparent; color: #666; transition: all 0.2s; }
     .tab-bar button.active { background: #6366f1; color: #fff; }
+    .upload-area { border: 2px dashed #d0d0d0; border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: border-color 0.2s; position: relative; }
+    .upload-area:hover { border-color: #6366f1; }
+    .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-area .upload-icon { font-size: 28px; margin-bottom: 6px; }
+    .upload-area .upload-text { font-size: 13px; color: #888; }
+    .preview-img { width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px; margin-top: 8px; }
+    .code-box { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 12px; text-align: center; margin: 12px 0; }
+    .code-box .code { font-size: 24px; font-weight: 700; color: #4f46e5; letter-spacing: 4px; }
+    .code-box .code-hint { font-size: 12px; color: #6366f1; margin-top: 4px; }
+    .img-viewer { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 200; cursor: pointer; }
+    .img-viewer img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 8px; }
     @media (max-width: 600px) {
       #item-list { grid-template-columns: 1fr; }
       header { flex-direction: column; gap: 12px; }
@@ -78,6 +94,7 @@
         <option value="服饰">服饰</option>
         <option value="运动户外">运动户外</option>
         <option value="母婴">母婴</option>
+        <option value="卫护">卫护</option>
         <option value="其他">其他</option>
       </select>
     </div>
@@ -120,12 +137,19 @@
           <option value="服饰">服饰</option>
           <option value="运动户外">运动户外</option>
           <option value="母婴">母婴</option>
+          <option value="卫护">卫护</option>
           <option value="其他">其他</option>
         </select>
       </div>
       <div class="form-group">
-        <label>图片链接（选填）</label>
-        <input id="p-image" placeholder="粘贴图片 URL">
+        <label>商品图片</label>
+        <div class="upload-area" id="upload-area">
+          <input type="file" accept="image/*" onchange="handleImageUpload(event)">
+          <div class="upload-icon">📷</div>
+          <div class="upload-text">点击选择图片或拖拽到此处</div>
+        </div>
+        <img id="preview-img" class="preview-img" style="display:none;">
+        <input type="hidden" id="p-image">
       </div>
       <div class="form-group">
         <label>你的姓名 *</label>
@@ -138,6 +162,24 @@
       <div class="modal-btns">
         <button class="btn-confirm" onclick="publishItem()">发布</button>
         <button class="btn-cancel" onclick="closePublish()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="manage-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>管理商品</h2>
+      <p id="manage-item-title" style="font-weight:600;margin-bottom:12px;color:#1a1a2e;"></p>
+      <div class="form-group">
+        <label>管理密码 *</label>
+        <input id="manage-code-input" placeholder="发布时获得的6位管理密码">
+      </div>
+      <div class="modal-btns">
+        <button class="btn-confirm" onclick="markAsSold()">标记已售</button>
+        <button class="btn-danger" onclick="deleteItem()">删除商品</button>
+      </div>
+      <div class="modal-btns" style="margin-top:8px;">
+        <button class="btn-cancel" onclick="closeManage()">取消</button>
       </div>
     </div>
   </div>
@@ -155,12 +197,28 @@
         <input id="m-contact" placeholder="微信号或手机号">
       </div>
       <div class="form-group">
-        <label>留言内容 *</label>
+        <label id="m-content-label">留言内容 *</label>
         <textarea id="m-content" placeholder="我对这个商品感兴趣..."></textarea>
       </div>
+      <input type="hidden" id="m-reply-to" value="">
       <div class="modal-btns">
-        <button class="btn-confirm" onclick="sendMessage()">发送留言</button>
+        <button class="btn-confirm" onclick="sendMessage()">发送</button>
         <button class="btn-cancel" onclick="closeMessage()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="code-result-modal" class="modal-overlay hidden">
+    <div class="modal" style="text-align:center;">
+      <h2>发布成功！</h2>
+      <p style="color:#666;font-size:13px;margin-bottom:8px;">请保存以下管理密码，用于后续删除或标记已售</p>
+      <div class="code-box">
+        <div class="code" id="result-code"></div>
+        <div class="code-hint">管理密码（点击复制）</div>
+      </div>
+      <div class="modal-btns">
+        <button class="btn-confirm" onclick="copyCode()">复制密码</button>
+        <button class="btn-cancel" onclick="closeCodeResult()">知道了</button>
       </div>
     </div>
   </div>
@@ -172,7 +230,13 @@
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentItemId = null;
+    let currentManageId = null;
     let statusFilter = 'available';
+    let lastPublishedCode = '';
+
+    function generateCode() {
+      return String(Math.floor(100000 + Math.random() * 900000));
+    }
 
     function setStatusFilter(status, btn) {
       statusFilter = status;
@@ -181,38 +245,49 @@
       loadItems();
     }
 
+    async function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) {
+        alert('图片不能超过5MB');
+        return;
+      }
+      const ext = file.name.split('.').pop();
+      const fileName = Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + ext;
+      const { data, error } = await db.storage.from('images').upload(fileName, file);
+      if (error) {
+        alert('图片上传失败: ' + error.message);
+        return;
+      }
+      const { data: urlData } = db.storage.from('images').getPublicUrl(fileName);
+      document.getElementById('p-image').value = urlData.publicUrl;
+      const preview = document.getElementById('preview-img');
+      preview.src = urlData.publicUrl;
+      preview.style.display = 'block';
+      document.querySelector('.upload-area .upload-text').textContent = '点击更换图片';
+    }
+
     async function loadItems() {
       const search = document.getElementById('search-input').value.toLowerCase().trim();
       const category = document.getElementById('category-filter').value;
-
-      const { data, error } = await db
-        .from('items')
-        .select('*')
-        .order('created_at', { ascending: false });
-
+      const { data, error } = await db.from('items').select('*').order('created_at', { ascending: false });
       if (error) {
-        console.error(error);
         document.getElementById('item-list').innerHTML = '<div class="empty-state"><p>加载失败，请刷新重试</p></div>';
         return;
       }
-
       const filtered = data.filter(item => {
-        const matchSearch = !search ||
-          item.title.toLowerCase().includes(search) ||
-          (item.description || '').toLowerCase().includes(search);
+        const matchSearch = !search || item.title.toLowerCase().includes(search) || (item.description || '').toLowerCase().includes(search);
         const matchCategory = !category || item.category === category;
         const matchStatus = statusFilter === 'all' || item.status === statusFilter;
         return matchSearch && matchCategory && matchStatus;
       });
-
       if (filtered.length === 0) {
         document.getElementById('item-list').innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>暂无商品，点击右上角发布吧</p></div>';
         return;
       }
-
       document.getElementById('item-list').innerHTML = filtered.map(item => {
         const imgHtml = item.image_url
-          ? `<img class="item-img" src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.title)}" onerror="this.outerHTML='<div class=\\'item-no-img\\'>📦</div>'">`
+          ? `<img class="item-img" src="${escapeHtml(item.image_url)}" alt="${escapeHtml(item.title)}" onclick="viewImage('${escapeJs(item.image_url)}')" onerror="this.outerHTML='<div class=\\'item-no-img\\'>📦</div>'">`
           : '<div class="item-no-img">📦</div>';
         const isSold = item.status === 'sold';
         return `
@@ -227,10 +302,19 @@
               <div class="actions">
                 <button class="btn-msg" onclick="openMessage(${item.id}, '${escapeJs(item.title)}')">留言</button>
                 <button class="btn-contact" onclick="showContact('${escapeJs(item.seller_contact)}')">联系卖家</button>
+                <button class="btn-manage" onclick="openManage(${item.id}, '${escapeJs(item.title)}')">管理</button>
               </div>
             </div>
           </div>`;
       }).join('');
+    }
+
+    function viewImage(url) {
+      const viewer = document.createElement('div');
+      viewer.className = 'img-viewer';
+      viewer.innerHTML = `<img src="${escapeHtml(url)}">`;
+      viewer.onclick = () => viewer.remove();
+      document.body.appendChild(viewer);
     }
 
     function escapeHtml(str) {
@@ -260,6 +344,9 @@
     }
 
     function showPublish() {
+      document.getElementById('preview-img').style.display = 'none';
+      document.getElementById('p-image').value = '';
+      document.querySelector('.upload-area .upload-text').textContent = '点击选择图片或拖拽到此处';
       document.getElementById('publish-modal').classList.remove('hidden');
     }
 
@@ -271,12 +358,11 @@
       const title = document.getElementById('p-title').value.trim();
       const sellerName = document.getElementById('p-seller').value.trim();
       const sellerContact = document.getElementById('p-contact').value.trim();
-
       if (!title || !sellerName || !sellerContact) {
         alert('请填写商品名称、姓名和联系方式');
         return;
       }
-
+      const code = generateCode();
       const item = {
         title: title,
         description: document.getElementById('p-desc').value.trim(),
@@ -285,28 +371,78 @@
         image_url: document.getElementById('p-image').value.trim() || null,
         seller_name: sellerName,
         seller_contact: sellerContact,
+        manage_code: code,
       };
-
       const { error } = await db.from('items').insert([item]);
       if (error) {
         alert('发布失败: ' + error.message);
         return;
       }
-
       document.getElementById('p-title').value = '';
       document.getElementById('p-desc').value = '';
       document.getElementById('p-price').value = '';
       document.getElementById('p-image').value = '';
       document.getElementById('p-seller').value = '';
       document.getElementById('p-contact').value = '';
-
+      document.getElementById('preview-img').style.display = 'none';
       closePublish();
+      loadItems();
+      lastPublishedCode = code;
+      document.getElementById('result-code').textContent = code;
+      document.getElementById('code-result-modal').classList.remove('hidden');
+    }
+
+    function closeCodeResult() {
+      document.getElementById('code-result-modal').classList.add('hidden');
+    }
+
+    function copyCode() {
+      navigator.clipboard.writeText(lastPublishedCode).then(() => {
+        alert('已复制管理密码: ' + lastPublishedCode);
+      });
+    }
+
+    function openManage(id, title) {
+      currentManageId = id;
+      document.getElementById('manage-item-title').textContent = title;
+      document.getElementById('manage-code-input').value = '';
+      document.getElementById('manage-modal').classList.remove('hidden');
+    }
+
+    function closeManage() {
+      document.getElementById('manage-modal').classList.add('hidden');
+      currentManageId = null;
+    }
+
+    async function markAsSold() {
+      const code = document.getElementById('manage-code-input').value.trim();
+      if (!code) { alert('请输入管理密码'); return; }
+      const { data } = await db.from('items').select('manage_code').eq('id', currentManageId).single();
+      if (!data || data.manage_code !== code) { alert('管理密码错误'); return; }
+      const { error } = await db.from('items').update({ status: 'sold' }).eq('id', currentManageId);
+      if (error) { alert('操作失败'); return; }
+      closeManage();
+      loadItems();
+    }
+
+    async function deleteItem() {
+      const code = document.getElementById('manage-code-input').value.trim();
+      if (!code) { alert('请输入管理密码'); return; }
+      if (!confirm('确定要删除这个商品吗？此操作不可恢复。')) return;
+      const { data } = await db.from('items').select('manage_code').eq('id', currentManageId).single();
+      if (!data || data.manage_code !== code) { alert('管理密码错误'); return; }
+      const { error } = await db.from('items').delete().eq('id', currentManageId);
+      if (error) { alert('删除失败'); return; }
+      closeManage();
       loadItems();
     }
 
     function openMessage(id, title) {
       currentItemId = id;
       document.getElementById('msg-item-title').textContent = title;
+      document.getElementById('m-reply-to').value = '';
+      document.getElementById('m-content-label').textContent = '留言内容 *';
+      document.getElementById('m-content').placeholder = '我对这个商品感兴趣...';
       document.getElementById('message-modal').classList.remove('hidden');
       loadMessages(id);
     }
@@ -316,52 +452,60 @@
       currentItemId = null;
     }
 
-    async function loadMessages(itemId) {
-      const { data } = await db
-        .from('messages')
-        .select('*')
-        .eq('item_id', itemId)
-        .order('created_at', { ascending: true });
+    function setReply(msgId, author) {
+      document.getElementById('m-reply-to').value = msgId;
+      document.getElementById('m-content-label').textContent = '回复 ' + author + ' *';
+      document.getElementById('m-content').placeholder = '回复 ' + author + '...';
+      document.getElementById('m-content').focus();
+    }
 
+    async function loadMessages(itemId) {
+      const { data } = await db.from('messages').select('*').eq('item_id', itemId).order('created_at', { ascending: true });
       const list = document.getElementById('msg-list');
       if (!data || data.length === 0) {
         list.innerHTML = '<p style="color:#aaa;font-size:13px;">暂无留言，来写第一条吧</p>';
         return;
       }
-
-      list.innerHTML = data.map(m => `
-        <div class="msg-item">
-          <span class="msg-author">${escapeHtml(m.buyer_name)}</span>: ${escapeHtml(m.content)}
-          <div class="msg-time">${formatDate(m.created_at)}</div>
-        </div>
-      `).join('');
-
+      const parents = data.filter(m => !m.parent_id);
+      const replies = data.filter(m => m.parent_id);
+      list.innerHTML = parents.map(p => {
+        const childReplies = replies.filter(r => r.parent_id === p.id);
+        const repliesHtml = childReplies.map(r => `
+          <div class="msg-reply">
+            <span class="msg-author">${escapeHtml(r.buyer_name)}</span>: ${escapeHtml(r.content)}
+            <div class="msg-time">${formatDate(r.created_at)}</div>
+          </div>
+        `).join('');
+        return `
+          <div class="msg-item">
+            <span class="msg-author">${escapeHtml(p.buyer_name)}</span>: ${escapeHtml(p.content)}
+            <button class="msg-reply-btn" onclick="setReply(${p.id}, '${escapeJs(p.buyer_name)}')">回复</button>
+            <div class="msg-time">${formatDate(p.created_at)}</div>
+            ${repliesHtml}
+          </div>
+        `;
+      }).join('');
       list.scrollTop = list.scrollHeight;
     }
 
     async function sendMessage() {
       const name = document.getElementById('m-name').value.trim();
       const content = document.getElementById('m-content').value.trim();
-
-      if (!name || !content) {
-        alert('请填写姓名和留言内容');
-        return;
-      }
-
+      if (!name || !content) { alert('请填写姓名和留言内容'); return; }
+      const replyTo = document.getElementById('m-reply-to').value;
       const msg = {
         item_id: currentItemId,
         buyer_name: name,
         buyer_contact: document.getElementById('m-contact').value.trim(),
         content: content,
+        parent_id: replyTo ? parseInt(replyTo) : null,
       };
-
       const { error } = await db.from('messages').insert([msg]);
-      if (error) {
-        alert('发送失败');
-        return;
-      }
-
+      if (error) { alert('发送失败'); return; }
       document.getElementById('m-content').value = '';
+      document.getElementById('m-reply-to').value = '';
+      document.getElementById('m-content-label').textContent = '留言内容 *';
+      document.getElementById('m-content').placeholder = '我对这个商品感兴趣...';
       loadMessages(currentItemId);
     }
 
@@ -380,12 +524,10 @@
       modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
     }
 
-    document.getElementById('publish-modal').addEventListener('click', function(e) {
-      if (e.target === this) closePublish();
-    });
-    document.getElementById('message-modal').addEventListener('click', function(e) {
-      if (e.target === this) closeMessage();
-    });
+    document.getElementById('publish-modal').addEventListener('click', function(e) { if (e.target === this) closePublish(); });
+    document.getElementById('message-modal').addEventListener('click', function(e) { if (e.target === this) closeMessage(); });
+    document.getElementById('manage-modal').addEventListener('click', function(e) { if (e.target === this) closeManage(); });
+    document.getElementById('code-result-modal').addEventListener('click', function(e) { if (e.target === this) closeCodeResult(); });
 
     loadItems();
   </script>
