@@ -172,7 +172,8 @@
       <p id="manage-item-title" style="font-weight:600;margin-bottom:12px;color:#1a1a2e;"></p>
       <div class="form-group">
         <label>管理密码 *</label>
-        <input id="manage-code-input" placeholder="发布时获得的6位管理密码">
+        <input id="manage-code-input" placeholder="请输入联系方式的后6位">
+        <p style="font-size:12px;color:#f59e0b;margin-top:4px;">提示：管理密码为发布时填写的联系方式的后6位</p>
       </div>
       <div class="modal-btns">
         <button class="btn-confirm" onclick="markAsSold()">标记已售</button>
@@ -211,7 +212,7 @@
   <div id="code-result-modal" class="modal-overlay hidden">
     <div class="modal" style="text-align:center;">
       <h2>发布成功！</h2>
-      <p style="color:#666;font-size:13px;margin-bottom:8px;">请保存以下管理密码，用于后续删除或标记已售</p>
+      <p style="color:#666;font-size:13px;margin-bottom:8px;">你的管理密码为联系方式的后6位，用于后续删除或标记已售</p>
       <div class="code-box">
         <div class="code" id="result-code"></div>
         <div class="code-hint">管理密码（点击复制）</div>
@@ -362,7 +363,11 @@
         alert('请填写商品名称、姓名和联系方式');
         return;
       }
-      const code = generateCode();
+      if (sellerContact.length < 6) {
+        alert('联系方式至少需要6个字符');
+        return;
+      }
+      const code = sellerContact.slice(-6);
       const item = {
         title: title,
         description: document.getElementById('p-desc').value.trim(),
@@ -414,27 +419,60 @@
       currentManageId = null;
     }
 
+    function showConfirmModal(title, message, onConfirm) {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
+        <div class="modal" style="text-align:center;">
+          <h2>${title}</h2>
+          <p style="color:#666;font-size:14px;margin:16px 0;">${message}</p>
+          <div class="modal-btns">
+            <button class="btn-danger" id="confirm-yes">确认</button>
+            <button class="btn-cancel" id="confirm-no">取消</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      modal.querySelector('#confirm-yes').onclick = () => { modal.remove(); onConfirm(); };
+      modal.querySelector('#confirm-no').onclick = () => modal.remove();
+      modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    }
+
     async function markAsSold() {
       const code = document.getElementById('manage-code-input').value.trim();
       if (!code) { alert('请输入管理密码'); return; }
       const { data } = await db.from('items').select('manage_code').eq('id', currentManageId).single();
       if (!data || data.manage_code !== code) { alert('管理密码错误'); return; }
-      const { error } = await db.from('items').update({ status: 'sold' }).eq('id', currentManageId);
-      if (error) { alert('操作失败'); return; }
-      closeManage();
-      loadItems();
+      const title = document.getElementById('manage-item-title').textContent;
+      showConfirmModal(
+        '确认标记已售？',
+        '确定将「' + title + '」标记为已售出吗？',
+        async () => {
+          const { error } = await db.from('items').update({ status: 'sold' }).eq('id', currentManageId);
+          if (error) { alert('操作失败'); return; }
+          closeManage();
+          const soldBtn = document.querySelectorAll('.tab-bar button')[1];
+          setStatusFilter('sold', soldBtn);
+        }
+      );
     }
 
     async function deleteItem() {
       const code = document.getElementById('manage-code-input').value.trim();
       if (!code) { alert('请输入管理密码'); return; }
-      if (!confirm('确定要删除这个商品吗？此操作不可恢复。')) return;
       const { data } = await db.from('items').select('manage_code').eq('id', currentManageId).single();
       if (!data || data.manage_code !== code) { alert('管理密码错误'); return; }
-      const { error } = await db.from('items').delete().eq('id', currentManageId);
-      if (error) { alert('删除失败'); return; }
-      closeManage();
-      loadItems();
+      const title = document.getElementById('manage-item-title').textContent;
+      showConfirmModal(
+        '确认删除商品？',
+        '确定删除「' + title + '」吗？此操作不可恢复！',
+        async () => {
+          const { error } = await db.from('items').delete().eq('id', currentManageId);
+          if (error) { alert('删除失败'); return; }
+          closeManage();
+          loadItems();
+        }
+      );
     }
 
     function openMessage(id, title) {
