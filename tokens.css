@@ -1,0 +1,163 @@
+/* ============================================
+   SeeSaw 跷跷板 · Design Tokens
+   Source of truth: DESIGN.md
+   ============================================ */
+
+/* --- Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ===== Ink Palette ===== */
+  --ink-900: #111111;
+  --ink-700: #333330;
+  --ink-500: #6B6860;
+  --ink-300: #B8B3A8;
+  --ink-100: #E8E4DA;
+  --paper-00: #FAF7F0;
+  --paper-pure: #FFFFFF;
+  --graphite: #1C1C1E;
+  --graphite-soft: #26262A;
+
+  /* ===== Accents ===== */
+  --accent-vermilion: #C24C3F;
+  --accent-ochre: #C79653;
+  --accent-sage: #6F7A5C;
+  --accent-ink-blue: #2E3A4D;
+
+  /* ===== Type Families ===== */
+  --font-serif-cn: "Noto Serif SC", "Songti SC", "STSong", serif;
+  --font-serif-en: "Instrument Serif", "Source Serif 4", Georgia, serif;
+  --font-sans-cn: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-serif-read: "Source Serif 4", "Noto Serif SC", Georgia, serif;
+  --font-mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+
+  /* ===== Type Scale (mobile base 375) ===== */
+  --type-hero: 40px;
+  --type-hero-lh: 1.15;
+  --type-display: 28px;
+  --type-display-lh: 1.25;
+  --type-h1: 22px;
+  --type-h1-lh: 1.35;
+  --type-h2: 18px;
+  --type-h2-lh: 1.4;
+  --type-body: 15px;
+  --type-body-lh: 1.65;
+  --type-caption: 13px;
+  --type-caption-lh: 1.5;
+  --type-tag: 11px;
+  --type-tag-lh: 1.3;
+
+  /* ===== Spacing (8pt grid) ===== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+
+  /* ===== Radius ===== */
+  --radius-none: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-full: 9999px;
+
+  /* ===== Elevation (used sparingly) ===== */
+  --shadow-float: 0 20px 60px -20px rgba(17, 17, 17, 0.18);
+  --shadow-subtle: 0 1px 0 var(--ink-100);
+
+  /* ===== Motion ===== */
+  --ease-editorial: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 120ms;
+  --dur-base: 240ms;
+}
+
+/* ============================================
+   Variant overrides — pick one via body class
+   ============================================ */
+
+/* V1 · Pages · 白纸黑墨 */
+body.v-pages {
+  --bg: var(--paper-pure);
+  --fg: var(--ink-900);
+  --fg-muted: var(--ink-500);
+  --hairline: var(--ink-100);
+  --accent: var(--accent-ink-blue);
+  --accent-cta: var(--accent-vermilion);
+  --font-display: var(--font-serif-cn);
+  --font-display-en: var(--font-serif-en);
+  --font-body: var(--font-sans-cn);
+}
+
+/* V2 · Memo · 米黄手帖（推荐） */
+body.v-memo {
+  --bg: var(--paper-00);
+  --fg: var(--ink-900);
+  --fg-muted: var(--ink-500);
+  --hairline: #D6CEB8;
+  --accent: var(--accent-ochre);
+  --accent-cta: var(--accent-vermilion);
+  --font-display: var(--font-serif-cn);
+  --font-display-en: var(--font-serif-en);
+  --font-body: var(--font-serif-read);
+}
+
+/* V3 · Index · 档案黑 */
+body.v-index {
+  --bg: var(--graphite);
+  --fg: #F2F0EA;
+  --fg-muted: #A8A49A;
+  --hairline: #3A3A3E;
+  --accent: var(--accent-sage);
+  --accent-cta: var(--accent-vermilion);
+  --font-display: var(--font-serif-en);
+  --font-display-en: var(--font-serif-en);
+  --font-body: var(--font-sans-cn);
+}
+
+/* ============================================
+   Shared base — resets
+   ============================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg, var(--paper-pure));
+  color: var(--fg, var(--ink-900));
+  font-family: var(--font-body, var(--font-sans-cn));
+  font-size: var(--type-body);
+  line-height: var(--type-body-lh);
+  letter-spacing: 0.01em;
+  text-wrap: pretty;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display, var(--font-serif-cn));
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+input, textarea, select { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+
+/* Utility: tabular numbers */
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
+
+/* Utility: hairline */
+.hairline { border: 0; border-top: 1px solid var(--hairline, var(--ink-100)); margin: 0; }
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--accent-cta);
+  outline-offset: 2px;
+}
