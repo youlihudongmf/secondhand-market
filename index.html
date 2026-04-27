@@ -1013,6 +1013,7 @@
               <div class="cat">${escapeHtml(item.category)}</div>
             </div>
             <div class="card-actions">
+              <button onclick="event.stopPropagation();openMessage(${item.id}, '${escapeJs(item.title)}')">留言</button>
               <button onclick="event.stopPropagation();showContact('${escapeJs(item.seller_contact)}')">联系卖家</button>
               <button onclick="event.stopPropagation();shareItem(${item.id}, '${escapeJs(item.title)}')">分享</button>
               <button onclick="event.stopPropagation();openManage(${item.id}, '${escapeJs(item.title)}')">管理</button>
